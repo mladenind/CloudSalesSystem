@@ -4,11 +4,12 @@ using CloudSalesSystem.Models.DTOs;
 
 namespace CloudSalesSystem.Common.Utils
 {
-    public class AutoMapper : Profile
+    public class MappingProfile : Profile
     {
-        public AutoMapper()
+        public MappingProfile()
         {
             CreateMap<Account, AccountDto>();
+            CreateMap<Service, ServiceDto>();
         }
     }
 }

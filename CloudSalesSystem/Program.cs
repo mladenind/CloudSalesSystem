@@ -1,5 +1,6 @@
 using CloudSalesSystem.Common.Filters;
 using CloudSalesSystem.Common.Interfaces;
+using CloudSalesSystem.Common.Services;
 using CloudSalesSystem.Common.Utils;
 using CloudSalesSystem.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +18,7 @@ try
         ;
     builder.Services.AddTransient<IApiKeyValidator, ApiKeyValidator>();
     builder.Services.AddScoped<ApiKeyAuthFilter>();
+    builder.Services.AddSingleton<ICloudComputingProviderService, CloudComputingProviderService>();
     builder.Services.AddAutoMapper(typeof(Program));
 
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
