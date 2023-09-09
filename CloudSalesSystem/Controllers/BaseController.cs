@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CloudSalesSystem.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiKey]
     public class BaseController: ControllerBase
     {

@@ -2,6 +2,8 @@ using CloudSalesSystem.Common.Filters;
 using CloudSalesSystem.Common.Interfaces;
 using CloudSalesSystem.Common.Utils;
 using CloudSalesSystem.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -11,18 +13,33 @@ try
 
     // Add services to the container.
 
-    builder.Services.AddControllers(options =>
-    {
-
-    });
+    builder.Services.AddControllers()
+        ;
     builder.Services.AddTransient<IApiKeyValidator, ApiKeyValidator>();
     builder.Services.AddScoped<ApiKeyAuthFilter>();
+    builder.Services.AddAutoMapper(typeof(Program));
+
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
+
     var connectionString = builder.Configuration.GetConnectionString("AppDb");
     builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
-    builder.Services.AddAutoMapper(typeof(Program));
+
+    builder.Services.AddApiVersioning(opt =>
+    {
+        opt.DefaultApiVersion = new ApiVersion(1, 0);
+        opt.AssumeDefaultVersionWhenUnspecified = true;
+        opt.ReportApiVersions = true;
+        opt.ApiVersionReader = ApiVersionReader.Combine(new UrlSegmentApiVersionReader());
+    });
+
+    builder.Services.AddVersionedApiExplorer(setup =>
+    {
+        setup.GroupNameFormat = "'v'VVV";
+        setup.SubstituteApiVersionInUrl = true;
+    });
+
     var app = builder.Build();
 
     // Configure the HTTP request pipeline.

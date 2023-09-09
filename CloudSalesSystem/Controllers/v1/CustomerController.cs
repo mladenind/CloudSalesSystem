@@ -1,12 +1,13 @@
-using AutoMapper;
-using CloudSalesSystem.Models;
+﻿using AutoMapper;
 using CloudSalesSystem.Models.DTOs;
+using CloudSalesSystem.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace CloudSalesSystem.Controllers
+namespace CloudSalesSystem.Controllers.v1
 {
-    public class CustomerController : BaseController
+    [ApiVersion("1.0")]
+    public class CustomerController: BaseController
     {
         private readonly IMapper _mapper;
         public CustomerController(IMapper mapper)
