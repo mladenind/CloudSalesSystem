@@ -1,4 +1,6 @@
+using CloudSalesSystem.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CloudSalesSystem.Controllers
 {
@@ -6,28 +8,12 @@ namespace CloudSalesSystem.Controllers
     [Route("[controller]")]
     public class CustomerController : BaseController
     {
-        private static readonly string[] Summaries = new[]
-        {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
 
-        private readonly ILogger<CustomerController> _logger;
-
-        public CustomerController(ILogger<CustomerController> logger)
+        [HttpGet("accounts")]
+        public async Task<List<Account>> GetAccounts()
         {
-            _logger = logger;
-        }
-
-        [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
-        {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+            using var db = new ApplicationDbContext();
+            return await db.Accounts.ToListAsync();
         }
     }
 }

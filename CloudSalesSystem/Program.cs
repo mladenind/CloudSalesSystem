@@ -22,7 +22,7 @@ try
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
     var connectionString = builder.Configuration.GetConnectionString("AppDb");
-    builder.Services.AddDbContext<ApplicationDBContext>(options => options.UseSqlServer(connectionString));
+    builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 
     var app = builder.Build();
 
@@ -39,7 +39,7 @@ try
 
     // Apply migrations on app start
     using var scope = app.Services.CreateScope();
-    await using var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
+    await using var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     await dbContext.Database.MigrateAsync();
 
     app.Run();

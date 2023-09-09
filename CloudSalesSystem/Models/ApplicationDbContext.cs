@@ -2,11 +2,15 @@
 
 namespace CloudSalesSystem.Models
 {
-    public class ApplicationDBContext: DbContext
+    public class ApplicationDbContext: DbContext
     {
-        protected readonly IConfiguration Configuration;
+        protected readonly IConfiguration? Configuration;
 
-        public ApplicationDBContext(IConfiguration configuration)
+        public ApplicationDbContext()
+        {
+        }
+
+        public ApplicationDbContext(IConfiguration configuration)
         {
             Configuration = configuration;
         }
@@ -25,5 +29,6 @@ namespace CloudSalesSystem.Models
         }
 
         public DbSet<Customer> Customers { get; set; }
+        public DbSet<Account> Accounts { get; set; }
     }
 }
