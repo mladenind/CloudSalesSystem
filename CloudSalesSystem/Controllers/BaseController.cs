@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CloudSalesSystem.Controllers
 {
+    [ApiController]
+    [Route("[controller]")]
     [ApiKey]
     public class BaseController: ControllerBase
     {
@@ -12,7 +14,7 @@ namespace CloudSalesSystem.Controllers
             get
             {
                 var db = new ApplicationDbContext();
-                return db.Customers.Where(x => x.Name.Equals("Main User")).First();
+                return db.Customers.Where(x => x.Name.Equals("Super Customer")).First();
             }
         }
     }

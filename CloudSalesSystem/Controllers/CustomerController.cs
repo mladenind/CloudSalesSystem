@@ -1,19 +1,25 @@
+using AutoMapper;
 using CloudSalesSystem.Models;
+using CloudSalesSystem.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace CloudSalesSystem.Controllers
 {
-    [ApiController]
-    [Route("[controller]")]
     public class CustomerController : BaseController
     {
+        private readonly IMapper _mapper;
+        public CustomerController(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
 
-        [HttpGet("accounts")]
-        public async Task<List<Account>> GetAccounts()
+        [HttpGet("Accounts")]
+        public async Task<List<AccountDto>> GetAccounts()
         {
             using var db = new ApplicationDbContext();
-            return await db.Accounts.ToListAsync();
+            var accounts = await db.Accounts.Where(x => x.CustomerId == CurrentCustomer.Id).ToListAsync();
+            return _mapper.Map<List<Account>, List<AccountDto>>(accounts);
         }
     }
 }
