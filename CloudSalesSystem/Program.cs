@@ -1,7 +1,10 @@
 using CloudSalesSystem.Common.Filters;
 using CloudSalesSystem.Common.Interfaces;
 using CloudSalesSystem.Common.Utils;
+using CloudSalesSystem.Models;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
+using System;
 
 try
 {
@@ -18,6 +21,8 @@ try
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
+    var connectionString = builder.Configuration.GetConnectionString("AppDb");
+    builder.Services.AddDbContext<ApplicationDBContext>(options => options.UseSqlServer(connectionString));
 
     var app = builder.Build();
 
@@ -29,10 +34,13 @@ try
     }
 
     app.UseHttpsRedirection();
-
     app.UseAuthorization();
-
     app.MapControllers();
+
+    // Apply migrations on app start
+    using var scope = app.Services.CreateScope();
+    await using var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDBContext>();
+    await dbContext.Database.MigrateAsync();
 
     app.Run();
 }

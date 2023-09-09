@@ -1,20 +1,19 @@
-using CloudSalesSystem.Common.Attributes;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CloudSalesSystem.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WeatherForecastController : BaseController
+    public class CustomerController : BaseController
     {
         private static readonly string[] Summaries = new[]
         {
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
     };
 
-        private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ILogger<CustomerController> _logger;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public CustomerController(ILogger<CustomerController> logger)
         {
             _logger = logger;
         }
