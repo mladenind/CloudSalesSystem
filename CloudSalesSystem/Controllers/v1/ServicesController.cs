@@ -53,5 +53,19 @@ namespace CloudSalesSystem.Controllers.v1
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpDelete("{accountId}/{licenseId}")]
+        public async Task<IActionResult> CancelServiceForAccount(int accountId, string licenseId)
+        {
+            try
+            {
+                await _mediator.Send(new CancelServiceForAccountIdAndLicenseIdCommand() { AccountId = accountId, LicenseId = licenseId });
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

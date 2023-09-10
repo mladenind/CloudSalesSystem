@@ -20,7 +20,7 @@ namespace CloudSalesSystem.Handlers
 
         public async Task<List<AccountLicenseDto>> Handle(GetServicesForAccountIdQuery query, CancellationToken cancellationToken)
         {
-            var accountLicenses = await _context.AccountLicenses.Where(license => license.AccountId == query.Id && license.IsLicenseActive()).ToListAsync();
+            var accountLicenses = await _context.AccountLicenses.Where(license => license.AccountId == query.Id && license.IsActive && (license.ExpirationDate == null || license.ExpirationDate > DateTime.UtcNow)).ToListAsync();
             return _mapper.Map<List<AccountLicense>, List<AccountLicenseDto>>(accountLicenses);
         }
     }

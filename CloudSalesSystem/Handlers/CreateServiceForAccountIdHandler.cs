@@ -35,7 +35,7 @@ namespace CloudSalesSystem.Handlers
                     throw new ArgumentException("You have exceeded the maximum amount of licenses for the selected software.");
                 }
 
-                var existingService = _context.AccountLicenses.Where(license => license.LicenseId.Equals(command.LicenseId) && license.AccountId == command.AccountId && license.IsLicenseActive()).FirstOrDefault();
+                var existingService = _context.AccountLicenses.Where(license => license.LicenseId.Equals(command.LicenseId) && license.AccountId == command.AccountId && license.IsActive && (license.ExpirationDate == null || license.ExpirationDate > DateTime.UtcNow)).FirstOrDefault();
                 if (existingService != null) 
                 {
                     Log.Warning($"Customer tried to purchase ${command.Quantity} licenses for the software ${command.Name} with license id ${command.LicenseId} which he already owns.");
