@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using System.Reflection;
 
 try
 {
@@ -20,6 +21,7 @@ try
     builder.Services.AddScoped<ApiKeyAuthFilter>();
     builder.Services.AddSingleton<ICloudComputingProviderService, CloudComputingProviderService>();
     builder.Services.AddAutoMapper(typeof(Program));
+    builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();

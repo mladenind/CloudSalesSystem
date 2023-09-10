@@ -1,26 +1,22 @@
-﻿using AutoMapper;
-using CloudSalesSystem.Common.Interfaces;
-using CloudSalesSystem.Models;
-using CloudSalesSystem.Models.DTOs;
+﻿using CloudSalesSystem.Models.DTOs;
+using CloudSalesSystem.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CloudSalesSystem.Controllers.v1
 {
     public class ServicesController: BaseController
     {
-        private readonly IMapper _mapper;
-        private readonly ICloudComputingProviderService _cloudComputingProviderService;
-        public ServicesController(IMapper mapper, ICloudComputingProviderService cloudComputingProviderService)
+        private readonly IMediator _mediator;
+        public ServicesController(IMediator mediator)
         {
-            _mapper = mapper;
-            _cloudComputingProviderService = cloudComputingProviderService;
+            _mediator = mediator;
         }
 
         [HttpGet("")]
         public async Task<IEnumerable<ServiceDto>> GetServices()
         {
-            var services = await _cloudComputingProviderService.GetServices();
-            return _mapper.Map<List<Service>, List<ServiceDto>>(services);
+            return await _mediator.Send(new GetAvailableServicesQuery());
         }
     }
 }
