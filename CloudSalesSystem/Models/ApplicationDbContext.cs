@@ -17,6 +17,7 @@ namespace CloudSalesSystem.Models
 
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Account> Accounts { get; set; }
+        public DbSet<AccountLicense> AccountLicenses { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -33,7 +34,6 @@ namespace CloudSalesSystem.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-           
             modelBuilder.Entity<Customer>()
                 .HasData(new Customer
                 {
