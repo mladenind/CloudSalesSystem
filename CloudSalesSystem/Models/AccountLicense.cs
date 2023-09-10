@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CloudSalesSystem.Models
 {
-    [Index(nameof(AccountId), nameof(LicenseId), IsUnique = true)]
+    [Index(nameof(AccountId), nameof(LicenseId), nameof(IsActive), IsUnique = true)]
     public class AccountLicense
     {
         public AccountLicense()
@@ -22,9 +22,15 @@ namespace CloudSalesSystem.Models
         public string Name { get; set; } = string.Empty;
         public int Quantity { get; set; }
         public DateTime? ExpirationDate { get; set; }   
-        public bool IsActive { get; set; }  
+        public bool? IsActive { get; set; }  
         public DateTime CreatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
         [ForeignKey("AccountId")]
         public Account Account { get; set; } = null!;
+
+        public bool IsLicenseActive()
+        {
+            return IsActive == true;
+        }
     }
 }

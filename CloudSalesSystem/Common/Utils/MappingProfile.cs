@@ -10,6 +10,7 @@ namespace CloudSalesSystem.Common.Utils
         {
             CreateMap<Account, AccountDto>();
             CreateMap<Service, ServiceDto>();
+            CreateMap<AccountLicense, AccountLicenseDto>();
         }
     }
 }

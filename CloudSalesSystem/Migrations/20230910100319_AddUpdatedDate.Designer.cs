@@ -4,6 +4,7 @@ using CloudSalesSystem.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CloudSalesSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230910100319_AddUpdatedDate")]
+    partial class AddUpdatedDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,21 +54,21 @@ namespace CloudSalesSystem.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2023, 9, 10, 10, 26, 24, 940, DateTimeKind.Utc).AddTicks(7046),
+                            CreatedDate = new DateTime(2023, 9, 10, 10, 3, 19, 97, DateTimeKind.Utc).AddTicks(9376),
                             CustomerId = 1,
                             Name = "First Test Account"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedDate = new DateTime(2023, 9, 10, 10, 26, 24, 940, DateTimeKind.Utc).AddTicks(7047),
+                            CreatedDate = new DateTime(2023, 9, 10, 10, 3, 19, 97, DateTimeKind.Utc).AddTicks(9378),
                             CustomerId = 1,
                             Name = "Second Test Account"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedDate = new DateTime(2023, 9, 10, 10, 26, 24, 940, DateTimeKind.Utc).AddTicks(7048),
+                            CreatedDate = new DateTime(2023, 9, 10, 10, 3, 19, 97, DateTimeKind.Utc).AddTicks(9379),
                             CustomerId = 1,
                             Name = "Second Test Account"
                         });
@@ -88,7 +91,7 @@ namespace CloudSalesSystem.Migrations
                     b.Property<DateTime?>("ExpirationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool?>("IsActive")
+                    b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<string>("LicenseId")
@@ -109,9 +112,8 @@ namespace CloudSalesSystem.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountId", "LicenseId", "IsActive")
-                        .IsUnique()
-                        .HasFilter("[IsActive] IS NOT NULL");
+                    b.HasIndex("AccountId", "LicenseId")
+                        .IsUnique();
 
                     b.ToTable("AccountLicenses");
                 });
@@ -145,7 +147,7 @@ namespace CloudSalesSystem.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedDate = new DateTime(2023, 9, 10, 10, 26, 24, 940, DateTimeKind.Utc).AddTicks(6930),
+                            CreatedDate = new DateTime(2023, 9, 10, 10, 3, 19, 97, DateTimeKind.Utc).AddTicks(9252),
                             Email = "supercustomer@crayon.com",
                             Name = "Super Customer"
                         });

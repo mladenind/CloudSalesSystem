@@ -6,18 +6,18 @@ using Serilog;
 
 namespace CloudSalesSystem.Handlers
 {
-    public class CreateAccountLicenseHandler : IRequestHandler<CreateAccountLicenseCommand>
+    public class CreateServiceForAccountIdHandler : IRequestHandler<CreateServiceForAccountIdCommand>
     {
         private readonly ICloudComputingProviderService _cloudComputingProviderService;
         private readonly ApplicationDbContext _context;
 
-        public CreateAccountLicenseHandler(ICloudComputingProviderService cloudComputingProviderService, ApplicationDbContext context)
+        public CreateServiceForAccountIdHandler(ICloudComputingProviderService cloudComputingProviderService, ApplicationDbContext context)
         {
             _cloudComputingProviderService = cloudComputingProviderService;
             _context = context;
         }
 
-        public async Task Handle(CreateAccountLicenseCommand command, CancellationToken cancellationToken)
+        public async Task Handle(CreateServiceForAccountIdCommand command, CancellationToken cancellationToken)
         {
             try
             {
@@ -35,7 +35,7 @@ namespace CloudSalesSystem.Handlers
                     throw new ArgumentException("You have exceeded the maximum amount of licenses for the selected software.");
                 }
 
-                var existingService = _context.AccountLicenses.Where(license => license.LicenseId.Equals(command.LicenseId) && license.AccountId == command.AccountId).FirstOrDefault();
+                var existingService = _context.AccountLicenses.Where(license => license.LicenseId.Equals(command.LicenseId) && license.AccountId == command.AccountId && license.IsLicenseActive()).FirstOrDefault();
                 if (existingService != null) 
                 {
                     Log.Warning($"Customer tried to purchase ${command.Quantity} licenses for the software ${command.Name} with license id ${command.LicenseId} which he already owns.");

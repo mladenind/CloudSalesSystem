@@ -3,9 +3,9 @@ using MediatR;
 
 namespace CloudSalesSystem.Commands
 {
-    public class CreateAccountLicenseCommand: IRequest
+    public class CreateServiceForAccountIdCommand: IRequest
     {
-        public CreateAccountLicenseCommand(int accountId, AccountLicenseDto accountLicenseDto)
+        public CreateServiceForAccountIdCommand(int accountId, AccountLicenseDto accountLicenseDto)
         {
             AccountId = accountId;
             LicenseId = accountLicenseDto.LicenseId;
