@@ -11,6 +11,10 @@ namespace CloudSalesSystem.Common.Utils
             CreateMap<Account, AccountDto>();
             CreateMap<Service, ServiceDto>();
             CreateMap<AccountLicense, AccountLicenseDto>();
+                //.ForMember(license => license.ExpirationDate, opt => {
+                //    opt.PreCondition(src => src.ExpirationDate.HasValue);
+                //    opt.MapFrom(src => DateOnly.FromDateTime((DateTime)src.ExpirationDate!));
+                //});
         }
     }
 }

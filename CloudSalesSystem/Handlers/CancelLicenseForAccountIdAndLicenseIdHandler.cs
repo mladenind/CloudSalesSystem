@@ -29,7 +29,7 @@ namespace CloudSalesSystem.Handlers
                     throw new ArgumentException("The software license you have selected is unavailable for cancellation right now.");
                 }
 
-                var existingService = _context.AccountLicenses.Where(license => license.LicenseId.Equals(command.LicenseId) && license.AccountId == command.AccountId && license.IsActive && (license.ExpirationDate == null || license.ExpirationDate > DateTime.UtcNow)).FirstOrDefault();
+                var existingService = _context.AccountLicenses.Where(license => license.LicenseId.Equals(command.LicenseId) && license.AccountId == command.AccountId && license.IsActive && (license.ExpirationDate == null || license.ExpirationDate > DateTime.UtcNow.Date)).FirstOrDefault();
                 if (existingService is null)
                 {
                     Log.Warning($"Customer tried to cancel the license with Id {command.LicenseId} which he doesn't own.");
@@ -37,7 +37,7 @@ namespace CloudSalesSystem.Handlers
                 }
 
                 existingService.IsActive = false;
-                existingService.ExpirationDate = DateTime.UtcNow;
+                existingService.ExpirationDate = null;
                 existingService.UpdatedDate = DateTime.UtcNow;
 
                 await _context.SaveChangesAsync(cancellationToken);
@@ -49,7 +49,7 @@ namespace CloudSalesSystem.Handlers
             }
             catch (Exception ex)
             {
-                Log.Error(ex.Message);
+                Log.Error(ex.ToString());
                 throw new Exception("Technical Error. Please try again.");
             }
         }

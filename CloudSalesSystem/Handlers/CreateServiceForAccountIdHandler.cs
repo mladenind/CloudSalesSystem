@@ -42,7 +42,7 @@ namespace CloudSalesSystem.Handlers
                     throw new ArgumentException("You have already purchased this software license for this account. You can modify the existing license via another action.");
                 }
 
-                _context.AccountLicenses.Add(new AccountLicense() { AccountId = command.AccountId, Quantity = command.Quantity, LicenseId = command.LicenseId, ExpirationDate = command.ExpirationDate, Name = selectedService.Name });
+                _context.AccountLicenses.Add(new AccountLicense() { AccountId = command.AccountId, Quantity = command.Quantity, LicenseId = command.LicenseId, ExpirationDate = command.ExpirationDate.HasValue ? command.ExpirationDate.Value.ToDateTime(TimeOnly.MinValue) : null, Name = selectedService.Name });
                 await _context.SaveChangesAsync(cancellationToken);
                 return;
             }

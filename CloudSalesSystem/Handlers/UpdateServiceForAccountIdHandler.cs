@@ -42,7 +42,13 @@ namespace CloudSalesSystem.Handlers
                     throw new ArgumentException("You cannot modify software that you don't already own. Please try purchasing it first.");
                 }
 
-                existingService.ExpirationDate = command.ExpirationDate;
+                if (command.ExpirationDate != null && existingService.ExpirationDate != null && command.ExpirationDate.Value.ToDateTime(TimeOnly.MinValue) < existingService.ExpirationDate)
+                {
+                    Log.Warning($"Customer tried to extend software {command.Name} with license id {command.LicenseId} to a prior date.");
+                    throw new ArgumentException("You can only extend the software license.");
+                }
+
+                existingService.ExpirationDate = command.ExpirationDate.HasValue ? command.ExpirationDate.Value.ToDateTime(TimeOnly.MinValue) : null;
                 existingService.Quantity = command.Quantity;
                 existingService.UpdatedDate = DateTime.UtcNow;
 

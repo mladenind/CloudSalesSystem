@@ -3,11 +3,13 @@ using CloudSalesSystem.Common.Interfaces;
 using CloudSalesSystem.Common.Services;
 using CloudSalesSystem.Common.Utils;
 using CloudSalesSystem.Models;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using System.Reflection;
+using static System.Net.Mime.MediaTypeNames;
 
 try
 {
@@ -54,6 +56,28 @@ try
         app.UseSwagger();
         app.UseSwaggerUI();
     }
+    else
+    {
+        app.UseExceptionHandler(exceptionHandlerApp =>
+        {
+            exceptionHandlerApp.Run(async context =>
+            {
+                if (context.Response.StatusCode == StatusCodes.Status400BadRequest)
+                {
+                    return;
+                }
+
+                var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
+                if (contextFeature != null)
+                {
+                    Log.Error(contextFeature.Error.ToString());
+                }
+                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                context.Response.ContentType = Text.Plain;
+                await context.Response.WriteAsync("Oops, something went wrong. If you're a dev, check the logs for the exception details.");
+            });
+        });
+    }
 
     app.UseHttpsRedirection();
     app.UseAuthorization();
@@ -68,7 +92,7 @@ try
 }
 catch (Exception ex)
 {
-    Log.Warning(ex, "An error occurred starting the application");
+    Log.Error(ex, "An error occurred starting the application");
 }
 finally
 {
