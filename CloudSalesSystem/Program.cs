@@ -13,6 +13,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 try
 {
+    // Logger configuration
     Log.Logger = new LoggerConfiguration()
         .MinimumLevel.Debug()
         .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
@@ -21,8 +22,9 @@ try
     Log.Information("App Startup");
 
     var builder = WebApplication.CreateBuilder(args);
-    builder.Services.AddControllers()
-        ;
+    builder.Services.AddControllers();
+
+    // Register API validator and filter, services, AutoMapper and MediatR
     builder.Services.AddTransient<IApiKeyValidator, ApiKeyValidator>();
     builder.Services.AddScoped<ApiKeyAuthFilter>();
     builder.Services.AddSingleton<ICloudComputingProviderService, CloudComputingProviderService>();
@@ -32,9 +34,11 @@ try
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
 
+    // Db setup
     var connectionString = builder.Configuration.GetConnectionString("AppDb");
     builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 
+    // API versioning
     builder.Services.AddApiVersioning(opt =>
     {
         opt.DefaultApiVersion = new ApiVersion(1, 0);
@@ -43,6 +47,7 @@ try
         opt.ApiVersionReader = ApiVersionReader.Combine(new UrlSegmentApiVersionReader());
     });
 
+    // Make the API aware of versioning
     builder.Services.AddVersionedApiExplorer(setup =>
     {
         setup.GroupNameFormat = "'v'VVV";
@@ -58,6 +63,7 @@ try
     }
     else
     {
+        // Handle and log exceptions in Production mode 
         app.UseExceptionHandler(exceptionHandlerApp =>
         {
             exceptionHandlerApp.Run(async context =>
