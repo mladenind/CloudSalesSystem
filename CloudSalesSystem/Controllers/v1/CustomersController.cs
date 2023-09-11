@@ -6,18 +6,18 @@ using Microsoft.AspNetCore.Mvc;
 namespace CloudSalesSystem.Controllers.v1
 {
     [ApiVersion("1.0")]
-    public class CustomerController: BaseController
+    public class CustomersController: BaseController
     {
         private readonly IMediator _mediator;
-        public CustomerController(IMediator mediator)
+        public CustomersController(IMediator mediator)
         {
             _mediator = mediator;
         }
 
         [HttpGet("Accounts")]
-        public async Task<List<AccountDto>> GetAccounts()
+        public async Task<IActionResult> GetAccountsForCustomer()
         {
-            return await _mediator.Send(new GetAccountsForCustomerIdQuery() { Id = CurrentCustomer.Id});
+            return Ok(await _mediator.Send(new GetAccountsForCustomerIdQuery() { Id = CurrentCustomer.Id}));
         }
     }
 }
