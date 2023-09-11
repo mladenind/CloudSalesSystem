@@ -11,10 +11,14 @@ using System.Reflection;
 
 try
 {
+    Log.Logger = new LoggerConfiguration()
+        .MinimumLevel.Debug()
+        .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
+        .CreateLogger();
+
+    Log.Information("App Startup");
+
     var builder = WebApplication.CreateBuilder(args);
-
-    // Add services to the container.
-
     builder.Services.AddControllers()
         ;
     builder.Services.AddTransient<IApiKeyValidator, ApiKeyValidator>();
@@ -23,7 +27,6 @@ try
     builder.Services.AddAutoMapper(typeof(Program));
     builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
-    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
 
@@ -46,7 +49,6 @@ try
 
     var app = builder.Build();
 
-    // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger();

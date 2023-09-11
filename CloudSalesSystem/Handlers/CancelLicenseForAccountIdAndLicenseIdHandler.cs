@@ -25,14 +25,14 @@ namespace CloudSalesSystem.Handlers
                 var selectedService = services.Where(service => service.Id.Equals(command.LicenseId)).FirstOrDefault();
                 if (selectedService is null)
                 {
-                    Log.Warning($"Customer tried to cancel the license with Id ${command.LicenseId} which is not included in the list of the available services.");
+                    Log.Warning($"Customer tried to cancel the license with Id {command.LicenseId} which is not included in the list of the available services.");
                     throw new ArgumentException("The software license you have selected is unavailable for cancellation right now.");
                 }
 
                 var existingService = _context.AccountLicenses.Where(license => license.LicenseId.Equals(command.LicenseId) && license.AccountId == command.AccountId && license.IsActive && (license.ExpirationDate == null || license.ExpirationDate > DateTime.UtcNow)).FirstOrDefault();
                 if (existingService is null)
                 {
-                    Log.Warning($"Customer tried to cancel the license with Id ${command.LicenseId} which he doesn't own.");
+                    Log.Warning($"Customer tried to cancel the license with Id {command.LicenseId} which he doesn't own.");
                     throw new ArgumentException("You cannot cancel software that you don't already own. Please try purchasing it first.");
                 }
 
