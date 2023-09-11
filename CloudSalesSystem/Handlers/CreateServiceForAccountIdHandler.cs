@@ -40,6 +40,12 @@ namespace CloudSalesSystem.Handlers
                 throw new ArgumentException("You have already purchased this software license for this account. You can modify the existing license via another action.");
             }
 
+            if (command.Quantity <= 0)
+            {
+                Log.Warning($"Customer tried to purchase an invalid amount of {command.Quantity} licenses for the software {command.Name} with license id {command.LicenseId}.");
+                throw new ArgumentException("You cannot purchase an amount of licenses that is zero or lower");
+            }
+
             _context.AccountLicenses.Add(new AccountLicense() { AccountId = command.AccountId, Quantity = command.Quantity, LicenseId = command.LicenseId, ExpirationDate = command.ExpirationDate.HasValue ? command.ExpirationDate.Value.ToDateTime(TimeOnly.MinValue) : null, Name = selectedService.Name });
             await _context.SaveChangesAsync(cancellationToken);
             return;

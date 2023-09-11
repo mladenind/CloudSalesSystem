@@ -46,6 +46,12 @@ namespace CloudSalesSystem.Handlers
                 throw new ArgumentException("You can only extend the software license.");
             }
 
+            if (command.Quantity <= 0)
+            {
+                Log.Warning($"Customer tried to change the amount of license to an invalid amount of {command.Quantity} licenses for the software {command.Name} with license id {command.LicenseId}.");
+                throw new ArgumentException("You cannot change the license quantity to zero or lower.");
+            }
+
             existingService.ExpirationDate = command.ExpirationDate.HasValue ? command.ExpirationDate.Value.ToDateTime(TimeOnly.MinValue) : null;
             existingService.Quantity = command.Quantity;
             existingService.UpdatedDate = DateTime.UtcNow;
