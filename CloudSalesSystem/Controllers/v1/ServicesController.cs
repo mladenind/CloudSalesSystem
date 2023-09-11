@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CloudSalesSystem.Controllers.v1
 {
+    [ApiVersion("1.0")]
     public class ServicesController: BaseController
     {
         private readonly IMediator _mediator;
@@ -34,7 +35,7 @@ namespace CloudSalesSystem.Controllers.v1
                 await _mediator.Send(new CreateServiceForAccountIdCommand(accountId, accountLicenseDto));
                 return NoContent();
             }
-            catch (Exception ex) 
+            catch (ArgumentException ex) 
             {   
                 return BadRequest(ex.Message);
             }          
@@ -48,7 +49,7 @@ namespace CloudSalesSystem.Controllers.v1
                 await _mediator.Send(new UpdateServiceForAccountIdCommand(accountId, accountLicenseDto));
                 return NoContent();
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -60,9 +61,9 @@ namespace CloudSalesSystem.Controllers.v1
             try
             {
                 await _mediator.Send(new CancelServiceForAccountIdAndLicenseIdCommand() { AccountId = accountId, LicenseId = licenseId });
-                return NoContent();
+                return NoContent();     
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
             }

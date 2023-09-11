@@ -19,39 +19,27 @@ namespace CloudSalesSystem.Handlers
 
         public async Task Handle(CancelServiceForAccountIdAndLicenseIdCommand command, CancellationToken cancellationToken)
         {
-            try
+            var services = await _cloudComputingProviderService.GetServices();
+            var selectedService = services.Where(service => service.Id.Equals(command.LicenseId)).FirstOrDefault();
+            if (selectedService is null)
             {
-                var services = await _cloudComputingProviderService.GetServices();
-                var selectedService = services.Where(service => service.Id.Equals(command.LicenseId)).FirstOrDefault();
-                if (selectedService is null)
-                {
-                    Log.Warning($"Customer tried to cancel the license with Id {command.LicenseId} which is not included in the list of the available services.");
-                    throw new ArgumentException("The software license you have selected is unavailable for cancellation right now.");
-                }
-
-                var existingService = _context.AccountLicenses.Where(license => license.LicenseId.Equals(command.LicenseId) && license.AccountId == command.AccountId && license.IsActive && (license.ExpirationDate == null || license.ExpirationDate > DateTime.UtcNow.Date)).FirstOrDefault();
-                if (existingService is null)
-                {
-                    Log.Warning($"Customer tried to cancel the license with Id {command.LicenseId} which he doesn't own.");
-                    throw new ArgumentException("You cannot cancel software that you don't already own. Please try purchasing it first.");
-                }
-
-                existingService.IsActive = false;
-                existingService.ExpirationDate = null;
-                existingService.UpdatedDate = DateTime.UtcNow;
-
-                await _context.SaveChangesAsync(cancellationToken);
-                return;
+                Log.Warning($"Customer tried to cancel the license with Id {command.LicenseId} which is not included in the list of the available services.");
+                throw new ArgumentException("The software license you have selected is unavailable for cancellation right now.");
             }
-            catch (ArgumentException)
+
+            var existingService = _context.AccountLicenses.Where(license => license.LicenseId.Equals(command.LicenseId) && license.AccountId == command.AccountId && license.IsActive && (license.ExpirationDate == null || license.ExpirationDate > DateTime.UtcNow.Date)).FirstOrDefault();
+            if (existingService is null)
             {
-                throw;
+                Log.Warning($"Customer tried to cancel the license with Id {command.LicenseId} which he doesn't own.");
+                throw new ArgumentException("You cannot cancel software that you don't already own. Please try purchasing it first.");
             }
-            catch (Exception ex)
-            {
-                Log.Error(ex.ToString());
-                throw new Exception("Technical Error. Please try again.");
-            }
+
+            existingService.IsActive = false;
+            existingService.ExpirationDate = null;
+            existingService.UpdatedDate = DateTime.UtcNow;
+
+            await _context.SaveChangesAsync(cancellationToken);
+            return;
         }
     }
 }
