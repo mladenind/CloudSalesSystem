@@ -15,6 +15,7 @@ namespace CloudSalesSystem.Common.Utils
                     opt.PreCondition(src => src.ExpirationDate.HasValue);
                     opt.MapFrom(src => DateOnly.FromDateTime((DateTime)src.ExpirationDate!));
                 });
+            CreateMap<Money, MoneyDto>();
         }
     }
 }

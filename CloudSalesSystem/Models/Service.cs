@@ -14,5 +14,7 @@ namespace CloudSalesSystem.Models
 
         [MaxLength(50)]
         public string Id { get; set; } = string.Empty;
+
+        public Money? Cost { get; set; }
     }
 }

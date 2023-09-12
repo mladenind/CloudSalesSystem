@@ -19,5 +19,8 @@ namespace CloudSalesSystem.Models.DTOs
 
         [JsonPropertyName("MaxQuantity")]
         public int? MaxQuantity { get; set; }
+
+        [JsonPropertyName("Cost")]
+        public MoneyDto? Cost { get; set; }
     }
 }
